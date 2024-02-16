@@ -20,5 +20,10 @@ public interface Scheduler<T> {
      * Runs after the specified amount of ticks.
      */
     public @NotNull Task<T> runIn(long ticks, @NotNull Consumer<T> runnable);
+
+    /**
+     * Run every specified amount of ticks
+     */
+    public @NotNull Task<T> runEvery(long ticks, @NotNull Consumer<T> runnable);
     
 }

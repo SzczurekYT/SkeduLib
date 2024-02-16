@@ -25,6 +25,9 @@ public class SyncScheduler<T> implements Scheduler<T> {
         while (queue.peek() != null && queue.peek().getTickstamp() <= tickstamp) {
             Task<T> poll = queue.poll();
             if (!(poll != null && !poll.isCancelled())) continue;
+            if (poll instanceof RepeatingTask<T> repeatingTask) {
+                queue.add(repeatingTask.getNext(tickstamp));
+            }
             poll.getRunnable().accept(ctx);
         }
     }
@@ -46,6 +49,13 @@ public class SyncScheduler<T> implements Scheduler<T> {
     @Override
     public @NotNull Task<T> runIn(long ticks, @NotNull Consumer<T> runnable) {
         Task<T> task = new Task<>(runnable, tickstamp + ticks);
+        queue.add(task);
+        return task;
+    }
+
+    @Override
+    public @NotNull Task<T> runEvery(long ticks, @NotNull Consumer<T> runnable) {
+        Task<T> task = new RepeatingTask<>(runnable, tickstamp + ticks, ticks);
         queue.add(task);
         return task;
     }
