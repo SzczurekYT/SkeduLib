@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "skedulib",
+  "version": "${version}",
+  "name": "SkeduLib",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/SzczurekYT/SkeduLib"
+  },
+  "license": "MIT",
+  "icon": "assets/skedulib/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "yt.szczurek.skedulib.impl.SkeduLibClient"
+    ],
+    "main": [
+      "yt.szczurek.skedulib.impl.SkeduLib"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": ">=${minecraft_version}"
+  }
+}
