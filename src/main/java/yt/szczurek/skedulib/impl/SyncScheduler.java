@@ -2,6 +2,7 @@ package yt.szczurek.skedulib.impl;
 
 import org.jetbrains.annotations.NotNull;
 import yt.szczurek.skedulib.api.Scheduler;
+import yt.szczurek.skedulib.api.Task;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -26,7 +27,9 @@ public class SyncScheduler<T> implements Scheduler<T> {
             Task<T> poll = queue.poll();
             if (!(poll != null && !poll.isCancelled())) continue;
             if (poll instanceof RepeatingTask<T> repeatingTask) {
-                queue.add(repeatingTask.getNext(tickstamp));
+                // Update the tickstamp for the next run and requeue
+                repeatingTask.updateTickstamp(tickstamp);
+                queue.add(repeatingTask);
             }
             poll.getRunnable().accept(ctx);
         }
@@ -34,21 +37,21 @@ public class SyncScheduler<T> implements Scheduler<T> {
 
     @Override
     public @NotNull Task<T> runNow(@NotNull Consumer<T> runnable) {
-        Task<T> task = new Task<>(runnable, -1);
+        Task<T> task = new SingleTask<>(runnable, -1);
         queue.add(task);
         return task;
     }
 
     @Override
     public @NotNull Task<T> runNextTick(@NotNull Consumer<T> runnable) {
-        Task<T> task = new Task<>(runnable, tickstamp + 1);
+        Task<T> task = new SingleTask<>(runnable, tickstamp + 1);
         queue.add(task);
         return task;
     }
 
     @Override
     public @NotNull Task<T> runIn(long ticks, @NotNull Consumer<T> runnable) {
-        Task<T> task = new Task<>(runnable, tickstamp + ticks);
+        Task<T> task = new SingleTask<>(runnable, tickstamp + ticks);
         queue.add(task);
         return task;
     }

@@ -1,7 +1,6 @@
 package yt.szczurek.skedulib.api;
 
 import org.jetbrains.annotations.NotNull;
-import yt.szczurek.skedulib.impl.Task;
 
 import java.util.function.Consumer;
 
