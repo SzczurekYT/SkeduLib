@@ -71,6 +71,8 @@ jar {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            groupId = 'yt.szczurek'
+            artifactId = 'skedulib'
             from components.java
         }
     }
