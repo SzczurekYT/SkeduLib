@@ -55,7 +55,7 @@ public class SyncScheduler<T> implements Scheduler<T> {
 
     @Override
     public @NotNull Task<T> runEvery(long ticks, @NotNull Consumer<T> runnable) {
-        Task<T> task = new RepeatingTask<>(runnable, tickstamp + ticks, ticks);
+        Task<T> task = new RepeatingTask<>(runnable, tickstamp, ticks);
         queue.add(task);
         return task;
     }
